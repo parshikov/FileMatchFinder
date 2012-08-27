@@ -1,0 +1,3 @@
+[submodule "BencodeLibrary"]
+	path = BencodeLibrary
+	url = git://github.com/parshikov/BencodeLibrary.git
