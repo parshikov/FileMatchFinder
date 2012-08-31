@@ -1,0 +1,5 @@
+/FileMatchFinder/obj
+/FileMatchFinder/bin
+Release
+*.user
+*.suo
