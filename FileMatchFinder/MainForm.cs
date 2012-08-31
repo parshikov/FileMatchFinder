@@ -36,18 +36,14 @@ namespace FilesMatchFinder
             DirectoryInfo filesDir = new DirectoryInfo(fileSourceTextBox.Text);
             List<FileInfo> searchesFileList = new List<FileInfo>(filesDir.GetFiles("*.*", SearchOption.AllDirectories));
 
-            // Читаем каждый торрент
-            List<Torrent> allFiles = new List<Torrent>();
-            foreach (FileInfo file in torrentFileList)
-            {
-                allFiles.Add(TorrentReader.ReadTorrent(file.FullName));
-            }
-
             // Чистим таблицу результатов
             resulDataGrid.Rows.Clear();
 
-            foreach (Torrent torrent in allFiles)
+            // Читаем каждый торрент
+
+            foreach (FileInfo file in torrentFileList)
             {
+                Torrent torrent = TorrentReader.ReadTorrent(file.FullName);
 
                 // Сортируем файлы и подсчитываем количество обработанных
                 int before = torrent.Files.Count;
