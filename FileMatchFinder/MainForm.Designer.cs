@@ -49,6 +49,7 @@
             this.torrentFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.sourceFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.destinationFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
+            this.fileFindWorker = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resulDataGrid)).BeginInit();
             this.SuspendLayout();
@@ -143,6 +144,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.useHardlinkCheckbox);
             this.groupBox1.Controls.Add(this.startButton);
             this.groupBox1.Controls.Add(this.copyFileCheckbox);
             this.groupBox1.Controls.Add(this.chooseDestinationFolderButton);
@@ -225,6 +227,13 @@
             // 
             this.sourceFolderBrowser.ShowNewFolderButton = false;
             // 
+            // fileFindWorker
+            // 
+            this.fileFindWorker.WorkerReportsProgress = true;
+            this.fileFindWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.fileFindWorker_DoWork);
+            this.fileFindWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.fileFindWorker_ProgressChanged);
+            this.fileFindWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.fileFindWorker_RunWorkerCompleted);
+            // 
             // fileFinderMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -266,6 +275,8 @@
         private System.Windows.Forms.FolderBrowserDialog torrentFolderBrowser;
         private System.Windows.Forms.FolderBrowserDialog sourceFolderBrowser;
         private System.Windows.Forms.FolderBrowserDialog destinationFolderBrowser;
+        private System.ComponentModel.BackgroundWorker fileFindWorker;
+        private System.Windows.Forms.CheckBox useHardlinkCheckbox;
     }
 }
 
