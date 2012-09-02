@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using BencodeLibrary;
 using System.IO;
-using System.Security.Cryptography;
-using System.Threading;
 
 namespace FilesMatchFinder
 {
     public partial class fileFinderMainForm : Form
     {
+
         public fileFinderMainForm()
         {
             InitializeComponent();
@@ -23,39 +18,14 @@ namespace FilesMatchFinder
         {
             startButton.Enabled = false;
 
-            // Сканируем директорию с торрентами
-            DirectoryInfo torrentDir = new DirectoryInfo(torrentDirectoryTextBox.Text);
-            List<FileInfo> torrentFileList;
-
-            if (recursiveTorrentSearchCheckbox.Checked)
-                torrentFileList = new List<FileInfo>(torrentDir.GetFiles("*.torrent", SearchOption.AllDirectories));
-            else
-                torrentFileList = new List<FileInfo>(torrentDir.GetFiles("*.torrent", SearchOption.TopDirectoryOnly));
-
-            // Сканируем директорию с файлами
-            DirectoryInfo filesDir = new DirectoryInfo(fileSourceTextBox.Text);
-            List<FileInfo> searchesFileList = new List<FileInfo>(filesDir.GetFiles("*.*", SearchOption.AllDirectories));
-
             // Чистим таблицу результатов
             resulDataGrid.Rows.Clear();
 
-            // Читаем каждый торрент
-
-            foreach (FileInfo file in torrentFileList)
+            if (fileFindWorker.IsBusy != true)
             {
-                Torrent torrent = TorrentReader.ReadTorrent(file.FullName);
-
-                // Сортируем файлы и подсчитываем количество обработанных
-                int before = torrent.Files.Count;
-                TreeWalker.FindFiles(torrent, searchesFileList, fileDestinationTextBox.Text, copyFileCheckbox.Checked);
-                int after = torrent.Files.Count;
-
-                // Рисуем результаты
-                resulDataGrid.Rows.Add(1);
-                resulDataGrid.Rows[resulDataGrid.Rows.Count - 1].Cells["FileName"].Value = torrent.FileName.ToLower();
-                resulDataGrid.Rows[resulDataGrid.Rows.Count - 1].Cells["FileProc"].Value = String.Format("{0}/{1} ({2:f2} %)", before - after, before, (before - after) * 100.0 / before);
+                // Start the asynchronous operation.
+                fileFindWorker.RunWorkerAsync();
             }
-            startButton.Enabled = true;
         }
 
         private void chooseTorrentFolderButton_Click(object sender, EventArgs e)
@@ -74,6 +44,54 @@ namespace FilesMatchFinder
         {
             destinationFolderBrowser.ShowDialog();
             fileDestinationTextBox.Text = destinationFolderBrowser.SelectedPath;
+        }
+
+        private void fileFindWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            // Сканируем директорию с торрентами
+            DirectoryInfo torrentDir = new DirectoryInfo(torrentDirectoryTextBox.Text);
+            List<FileInfo> torrentFileList;
+
+            if (recursiveTorrentSearchCheckbox.Checked)
+                torrentFileList = new List<FileInfo>(torrentDir.GetFiles("*.torrent", SearchOption.AllDirectories));
+            else
+                torrentFileList = new List<FileInfo>(torrentDir.GetFiles("*.torrent", SearchOption.TopDirectoryOnly));
+
+            // Сканируем директорию с файлами
+            DirectoryInfo filesDir = new DirectoryInfo(fileSourceTextBox.Text);
+            List<FileInfo> searchesFileList = new List<FileInfo>(filesDir.GetFiles("*.*", SearchOption.AllDirectories));
+
+            // Читаем каждый торрент
+
+            foreach (FileInfo file in torrentFileList)
+            {
+                // Читаем .torrent
+                Torrent torrent = TorrentReader.ReadTorrent(file.FullName);
+
+                int filesBefore = torrent.Files.Count;
+                // Сортируем файлы
+                TreeWalker.FindFiles(torrent, searchesFileList, fileDestinationTextBox.Text, copyFileCheckbox.Checked, checkOnlyFirstPiece.Checked);
+
+                fileFindWorker.ReportProgress(filesBefore, torrent);
+            }
+        }
+
+        private void fileFindWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            Torrent torrent = e.UserState as Torrent;
+            int filesBefore = e.ProgressPercentage;
+            int filesProcessed = filesBefore - torrent.Files.Count;
+
+            // Рисуем результаты
+            resulDataGrid.Rows.Add(1);
+            resulDataGrid.Rows[resulDataGrid.Rows.Count - 1].Cells["FileName"].Value = torrent.FileName.ToLower();
+            resulDataGrid.Rows[resulDataGrid.Rows.Count - 1].Cells["FileProc"].Value =
+                String.Format("{0}/{1} ({2:f2} %)", filesProcessed, filesBefore, filesProcessed * 100.0 / filesBefore);
+        }
+
+        private void fileFindWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            startButton.Enabled = true;
         }
     }
 }
