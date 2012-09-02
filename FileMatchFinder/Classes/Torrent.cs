@@ -26,7 +26,7 @@ namespace FilesMatchFinder
                 throw new ArgumentNullException("Размер куска не может быть меньше нуля");
 
             Hash = hash;
-            FileName= fileName;
+            FileName = fileName;
 
         }
 
@@ -36,7 +36,7 @@ namespace FilesMatchFinder
         public List<LostFile> Files;
         public string FileName;
 
-        public bool CheckHash(int index, FileInfo fileOnDisk)
+        public bool CheckHash(int index, FileInfo fileOnDisk, bool checkFirstOnly)
         {
             LostFile checkingFile = this.Files[index];
 
@@ -45,7 +45,7 @@ namespace FilesMatchFinder
 
             long start = 0;
             long firstChunkNumber = 0;
-            
+
             long bytesOverhead = checkingFile.BeginFrom % this.PieceLength;
 
             if (bytesOverhead == 0)
@@ -60,8 +60,7 @@ namespace FilesMatchFinder
             }
 
             char[] hashInTorrent = new char[20];
-            Array.Copy(this.Hash, firstChunkNumber * 20, hashInTorrent, 0, 20);
-            
+
             // считаем хэш файла с start до finish
             char[] fileHash = new char[this.PieceLength];
 
@@ -73,18 +72,27 @@ namespace FilesMatchFinder
 
                     fs.BaseStream.Position = start;
 
-                    fs.Read(piece, 0, this.PieceLength);
+                    while (fs.BaseStream.Position + this.PieceLength < checkingFile.Length)
+                    {
+                        Array.Copy(this.Hash, firstChunkNumber * 20, hashInTorrent, 0, 20);
+                        firstChunkNumber++;
 
-                    fileHash = Encoding.GetEncoding(437).GetString(sha1.ComputeHash(piece)).ToCharArray();
+                        fs.Read(piece, 0, this.PieceLength);
+                        fileHash = Encoding.GetEncoding(437).GetString(sha1.ComputeHash(piece)).ToCharArray();
+
+                        for (int i = 0; i < fileHash.Length; i++)
+                            if (fileHash[i] != hashInTorrent[i])
+                                return false;
+
+                        if (checkFirstOnly)
+                            break;
+                    }
+
                 }
             }
 
-            for (int i = 0; i < fileHash.Length; i++)
-                if (fileHash[i] != hashInTorrent[i])
-                    return false;
-
             return true;
         }
-        
+
     }
 }

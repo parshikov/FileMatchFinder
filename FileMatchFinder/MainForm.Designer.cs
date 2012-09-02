@@ -39,7 +39,7 @@
             this.fileCollectionPathLabel = new System.Windows.Forms.Label();
             this.sortedFilesPathLabel = new System.Windows.Forms.Label();
             this.startButton = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.settingBox = new System.Windows.Forms.GroupBox();
             this.copyFileCheckbox = new System.Windows.Forms.CheckBox();
             this.chooseDestinationFolderButton = new System.Windows.Forms.Button();
             this.resulDataGrid = new System.Windows.Forms.DataGridView();
@@ -50,7 +50,8 @@
             this.sourceFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.destinationFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.fileFindWorker = new System.ComponentModel.BackgroundWorker();
-            this.groupBox1.SuspendLayout();
+            this.checkOnlyFirstPiece = new System.Windows.Forms.CheckBox();
+            this.settingBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resulDataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -137,31 +138,31 @@
             this.startButton.Location = new System.Drawing.Point(487, 169);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
-            this.startButton.TabIndex = 9;
+            this.startButton.TabIndex = 10;
             this.startButton.Text = "Старт";
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
-            // groupBox1
+            // settingBox
             // 
-            this.groupBox1.Controls.Add(this.useHardlinkCheckbox);
-            this.groupBox1.Controls.Add(this.startButton);
-            this.groupBox1.Controls.Add(this.copyFileCheckbox);
-            this.groupBox1.Controls.Add(this.chooseDestinationFolderButton);
-            this.groupBox1.Controls.Add(this.torrentFolderPathLabel);
-            this.groupBox1.Controls.Add(this.recursiveTorrentSearchCheckbox);
-            this.groupBox1.Controls.Add(this.torrentDirectoryTextBox);
-            this.groupBox1.Controls.Add(this.fileDestinationTextBox);
-            this.groupBox1.Controls.Add(this.sortedFilesPathLabel);
-            this.groupBox1.Controls.Add(this.chooseTorrentFolderButton);
-            this.groupBox1.Controls.Add(this.fileCollectionPathLabel);
-            this.groupBox1.Controls.Add(this.chooseCollectionFolderButton);
-            this.groupBox1.Controls.Add(this.fileSourceTextBox);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(568, 198);
-            this.groupBox1.TabIndex = 11;
-            this.groupBox1.TabStop = false;
+            this.settingBox.Controls.Add(this.checkOnlyFirstPiece);
+            this.settingBox.Controls.Add(this.startButton);
+            this.settingBox.Controls.Add(this.copyFileCheckbox);
+            this.settingBox.Controls.Add(this.chooseDestinationFolderButton);
+            this.settingBox.Controls.Add(this.torrentFolderPathLabel);
+            this.settingBox.Controls.Add(this.recursiveTorrentSearchCheckbox);
+            this.settingBox.Controls.Add(this.torrentDirectoryTextBox);
+            this.settingBox.Controls.Add(this.fileDestinationTextBox);
+            this.settingBox.Controls.Add(this.sortedFilesPathLabel);
+            this.settingBox.Controls.Add(this.chooseTorrentFolderButton);
+            this.settingBox.Controls.Add(this.fileCollectionPathLabel);
+            this.settingBox.Controls.Add(this.chooseCollectionFolderButton);
+            this.settingBox.Controls.Add(this.fileSourceTextBox);
+            this.settingBox.Location = new System.Drawing.Point(12, 12);
+            this.settingBox.Name = "settingBox";
+            this.settingBox.Size = new System.Drawing.Size(568, 198);
+            this.settingBox.TabIndex = 11;
+            this.settingBox.TabStop = false;
             // 
             // copyFileCheckbox
             // 
@@ -234,6 +235,18 @@
             this.fileFindWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.fileFindWorker_ProgressChanged);
             this.fileFindWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.fileFindWorker_RunWorkerCompleted);
             // 
+            // checkOnlyFirstPiece
+            // 
+            this.checkOnlyFirstPiece.AutoSize = true;
+            this.checkOnlyFirstPiece.Checked = true;
+            this.checkOnlyFirstPiece.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkOnlyFirstPiece.Location = new System.Drawing.Point(256, 152);
+            this.checkOnlyFirstPiece.Name = "checkOnlyFirstPiece";
+            this.checkOnlyFirstPiece.Size = new System.Drawing.Size(222, 17);
+            this.checkOnlyFirstPiece.TabIndex = 9;
+            this.checkOnlyFirstPiece.Text = "Проверять только один кусок в файле";
+            this.checkOnlyFirstPiece.UseVisualStyleBackColor = true;
+            // 
             // fileFinderMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -241,12 +254,12 @@
             this.ClientSize = new System.Drawing.Size(592, 458);
             this.Controls.Add(this.resultLabel);
             this.Controls.Add(this.resulDataGrid);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.settingBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "fileFinderMainForm";
             this.Text = "FilesMatchFinder";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.settingBox.ResumeLayout(false);
+            this.settingBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resulDataGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -265,7 +278,7 @@
         private System.Windows.Forms.Label fileCollectionPathLabel;
         private System.Windows.Forms.Label sortedFilesPathLabel;
         private System.Windows.Forms.Button startButton;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox settingBox;
         private System.Windows.Forms.Button chooseDestinationFolderButton;
         private System.Windows.Forms.CheckBox copyFileCheckbox;
         private System.Windows.Forms.DataGridView resulDataGrid;
@@ -276,7 +289,7 @@
         private System.Windows.Forms.FolderBrowserDialog sourceFolderBrowser;
         private System.Windows.Forms.FolderBrowserDialog destinationFolderBrowser;
         private System.ComponentModel.BackgroundWorker fileFindWorker;
-        private System.Windows.Forms.CheckBox useHardlinkCheckbox;
+        private System.Windows.Forms.CheckBox checkOnlyFirstPiece;
     }
 }
 

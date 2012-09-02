@@ -70,7 +70,7 @@ namespace FilesMatchFinder
 
                 int filesBefore = torrent.Files.Count;
                 // Сортируем файлы
-                TreeWalker.FindFiles(torrent, searchesFileList, fileDestinationTextBox.Text, copyFileCheckbox.Checked);
+                TreeWalker.FindFiles(torrent, searchesFileList, fileDestinationTextBox.Text, copyFileCheckbox.Checked, checkOnlyFirstPiece.Checked);
 
                 fileFindWorker.ReportProgress(filesBefore, torrent);
             }

@@ -5,11 +5,11 @@ namespace FilesMatchFinder
 {
     public static class TreeWalker
     {
-        public static void FindFiles(Torrent torrent, List<FileInfo> files, string destinationPath, bool copyFile)
+        public static void FindFiles(Torrent torrent, List<FileInfo> files, string destinationPath, bool copyFile, bool checkFirstOnly)
         {
             //int i = 0;
 
-            for (int i = 0; i < torrent.Files.Count; i++)// (LostFile fileInTorrent in torrent.Files)
+            for (int i = 0; i < torrent.Files.Count; i++)
             {
                 LostFile fileInTorrent = torrent.Files[i];
 
@@ -18,10 +18,10 @@ namespace FilesMatchFinder
                     FileInfo fileOnDisk = files[j];
 
                     // Ищем файл с таким разширением
-                    if (fileOnDisk.Extension != Path.GetExtension(fileInTorrent.Name))
+                    if (fileOnDisk.Extension.ToLower() != Path.GetExtension(fileInTorrent.Name).ToLower())
                         continue;
                     // Проверяем хэш
-                    if (!torrent.CheckHash(i, fileOnDisk))
+                    if (!torrent.CheckHash(i, fileOnDisk, checkFirstOnly))
                         continue;
 
                     // Все проверки пройдены. перед нами искомый файл
