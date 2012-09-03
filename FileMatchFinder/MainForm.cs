@@ -63,30 +63,32 @@ namespace FilesMatchFinder
 
             // Читаем каждый торрент
 
-            foreach (FileInfo file in torrentFileList)
+            for (int i = 0; i < torrentFileList.Count; i++)
             {
                 // Читаем .torrent
-                Torrent torrent = TorrentReader.ReadTorrent(file.FullName);
+                Torrent torrent = TorrentReader.ReadTorrent(torrentFileList[i].FullName);
 
-                int filesBefore = torrent.Files.Count;
                 // Сортируем файлы
                 TreeWalker.FindFiles(torrent, searchesFileList, fileDestinationTextBox.Text, copyFileCheckbox.Checked, checkOnlyFirstPiece.Checked);
 
-                fileFindWorker.ReportProgress(filesBefore, torrent);
+                fileFindWorker.ReportProgress((i+1) * 100 / torrentFileList.Count, torrent);
             }
         }
 
         private void fileFindWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             Torrent torrent = e.UserState as Torrent;
-            int filesBefore = e.ProgressPercentage;
-            int filesProcessed = filesBefore - torrent.Files.Count;
+            int filesBefore = torrent.FilesPrecessed + torrent.Files.Count;
+            int filesProcessed = torrent.FilesPrecessed;
 
             // Рисуем результаты
             resulDataGrid.Rows.Add(1);
             resulDataGrid.Rows[resulDataGrid.Rows.Count - 1].Cells["FileName"].Value = torrent.FileName.ToLower();
             resulDataGrid.Rows[resulDataGrid.Rows.Count - 1].Cells["FileProc"].Value =
                 String.Format("{0}/{1} ({2:f2} %)", filesProcessed, filesBefore, filesProcessed * 100.0 / filesBefore);
+
+            workProgressBar.Value = e.ProgressPercentage;
+            workProgressLabel.Text = String.Format("Завершено: {0}%", e.ProgressPercentage);
         }
 
         private void fileFindWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

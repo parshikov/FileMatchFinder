@@ -40,6 +40,7 @@
             this.sortedFilesPathLabel = new System.Windows.Forms.Label();
             this.startButton = new System.Windows.Forms.Button();
             this.settingBox = new System.Windows.Forms.GroupBox();
+            this.checkOnlyFirstPiece = new System.Windows.Forms.CheckBox();
             this.copyFileCheckbox = new System.Windows.Forms.CheckBox();
             this.chooseDestinationFolderButton = new System.Windows.Forms.Button();
             this.resulDataGrid = new System.Windows.Forms.DataGridView();
@@ -50,7 +51,8 @@
             this.sourceFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.destinationFolderBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.fileFindWorker = new System.ComponentModel.BackgroundWorker();
-            this.checkOnlyFirstPiece = new System.Windows.Forms.CheckBox();
+            this.workProgressBar = new System.Windows.Forms.ProgressBar();
+            this.workProgressLabel = new System.Windows.Forms.Label();
             this.settingBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resulDataGrid)).BeginInit();
             this.SuspendLayout();
@@ -164,6 +166,18 @@
             this.settingBox.TabIndex = 11;
             this.settingBox.TabStop = false;
             // 
+            // checkOnlyFirstPiece
+            // 
+            this.checkOnlyFirstPiece.AutoSize = true;
+            this.checkOnlyFirstPiece.Checked = true;
+            this.checkOnlyFirstPiece.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkOnlyFirstPiece.Location = new System.Drawing.Point(256, 152);
+            this.checkOnlyFirstPiece.Name = "checkOnlyFirstPiece";
+            this.checkOnlyFirstPiece.Size = new System.Drawing.Size(222, 17);
+            this.checkOnlyFirstPiece.TabIndex = 9;
+            this.checkOnlyFirstPiece.Text = "Проверять только один кусок в файле";
+            this.checkOnlyFirstPiece.UseVisualStyleBackColor = true;
+            // 
             // copyFileCheckbox
             // 
             this.copyFileCheckbox.AutoSize = true;
@@ -195,9 +209,9 @@
             this.resulDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.FileName,
             this.fileProc});
-            this.resulDataGrid.Location = new System.Drawing.Point(13, 239);
+            this.resulDataGrid.Location = new System.Drawing.Point(12, 286);
             this.resulDataGrid.Name = "resulDataGrid";
-            this.resulDataGrid.Size = new System.Drawing.Size(567, 207);
+            this.resulDataGrid.Size = new System.Drawing.Size(567, 238);
             this.resulDataGrid.TabIndex = 10;
             // 
             // FileName
@@ -214,7 +228,7 @@
             // resultLabel
             // 
             this.resultLabel.AutoSize = true;
-            this.resultLabel.Location = new System.Drawing.Point(9, 223);
+            this.resultLabel.Location = new System.Drawing.Point(12, 270);
             this.resultLabel.Name = "resultLabel";
             this.resultLabel.Size = new System.Drawing.Size(62, 13);
             this.resultLabel.TabIndex = 0;
@@ -235,23 +249,28 @@
             this.fileFindWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.fileFindWorker_ProgressChanged);
             this.fileFindWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.fileFindWorker_RunWorkerCompleted);
             // 
-            // checkOnlyFirstPiece
+            // workProgressBar
             // 
-            this.checkOnlyFirstPiece.AutoSize = true;
-            this.checkOnlyFirstPiece.Checked = true;
-            this.checkOnlyFirstPiece.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkOnlyFirstPiece.Location = new System.Drawing.Point(256, 152);
-            this.checkOnlyFirstPiece.Name = "checkOnlyFirstPiece";
-            this.checkOnlyFirstPiece.Size = new System.Drawing.Size(222, 17);
-            this.checkOnlyFirstPiece.TabIndex = 9;
-            this.checkOnlyFirstPiece.Text = "Проверять только один кусок в файле";
-            this.checkOnlyFirstPiece.UseVisualStyleBackColor = true;
+            this.workProgressBar.Location = new System.Drawing.Point(13, 244);
+            this.workProgressBar.Name = "workProgressBar";
+            this.workProgressBar.Size = new System.Drawing.Size(567, 23);
+            this.workProgressBar.TabIndex = 12;
+            // 
+            // workProgressLabel
+            // 
+            this.workProgressLabel.AutoSize = true;
+            this.workProgressLabel.Location = new System.Drawing.Point(12, 228);
+            this.workProgressLabel.Name = "workProgressLabel";
+            this.workProgressLabel.Size = new System.Drawing.Size(0, 13);
+            this.workProgressLabel.TabIndex = 13;
             // 
             // fileFinderMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(592, 458);
+            this.ClientSize = new System.Drawing.Size(592, 536);
+            this.Controls.Add(this.workProgressLabel);
+            this.Controls.Add(this.workProgressBar);
             this.Controls.Add(this.resultLabel);
             this.Controls.Add(this.resulDataGrid);
             this.Controls.Add(this.settingBox);
@@ -290,6 +309,8 @@
         private System.Windows.Forms.FolderBrowserDialog destinationFolderBrowser;
         private System.ComponentModel.BackgroundWorker fileFindWorker;
         private System.Windows.Forms.CheckBox checkOnlyFirstPiece;
+        private System.Windows.Forms.ProgressBar workProgressBar;
+        private System.Windows.Forms.Label workProgressLabel;
     }
 }
 

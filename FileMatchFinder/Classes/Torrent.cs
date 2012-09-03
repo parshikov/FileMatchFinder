@@ -36,6 +36,8 @@ namespace FilesMatchFinder
         public List<LostFile> Files;
         public string FileName;
 
+        public int FilesPrecessed = 0;
+
         public bool CheckHash(int index, FileInfo fileOnDisk, bool checkFirstOnly)
         {
             LostFile checkingFile = this.Files[index];

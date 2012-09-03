@@ -42,6 +42,7 @@ namespace FilesMatchFinder
                         files.Remove(fileOnDisk);
                         // Убираем из описания торрента
                         torrent.Files.RemoveAt(i--);
+                        torrent.FilesPrecessed++;
 
                         break;
                     }
