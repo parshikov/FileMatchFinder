@@ -53,13 +53,13 @@ namespace FilesMatchFinder
             List<FileInfo> torrentFileList;
 
             if (recursiveTorrentSearchCheckbox.Checked)
-                torrentFileList = new List<FileInfo>(torrentDir.GetFiles("*.torrent", SearchOption.AllDirectories));
+                torrentFileList = TreeWalker.ScanFileTree(torrentDir.FullName, "*.torrent", SearchOption.AllDirectories);
             else
-                torrentFileList = new List<FileInfo>(torrentDir.GetFiles("*.torrent", SearchOption.TopDirectoryOnly));
+                torrentFileList = TreeWalker.ScanFileTree(torrentDir.FullName, "*.torrent", SearchOption.TopDirectoryOnly);
 
             // Сканируем директорию с файлами
             DirectoryInfo filesDir = new DirectoryInfo(fileSourceTextBox.Text);
-            List<FileInfo> searchesFileList = new List<FileInfo>(filesDir.GetFiles("*.*", SearchOption.AllDirectories));
+            List<FileInfo> searchesFileList = TreeWalker.ScanFileTree(filesDir.FullName, "*.*", SearchOption.AllDirectories);
 
             // Читаем каждый торрент
 

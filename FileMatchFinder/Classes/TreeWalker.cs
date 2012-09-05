@@ -1,10 +1,44 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Security.Permissions;
+using System.Security;
+using System;
 
 namespace FilesMatchFinder
 {
     public static class TreeWalker
     {
+        public static void ScanFileTree(string path, string pattern, List<FileInfo> files)
+        {
+            foreach (string dir in Directory.GetDirectories(path))
+            {
+                try
+                {
+                    DirectoryInfo currentDir = new DirectoryInfo(dir);
+                    files.AddRange(currentDir.GetFiles(pattern, SearchOption.TopDirectoryOnly));
+
+                    ScanFileTree(dir, pattern, files);
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    continue;
+                }
+            }
+        }
+
+        public static List<FileInfo> ScanFileTree(string path, string pattern, SearchOption searchOption)
+        {
+            List<FileInfo> files = new List<FileInfo>();
+
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            files.AddRange(dirInfo.GetFiles(pattern, SearchOption.TopDirectoryOnly));
+
+            if (searchOption == SearchOption.AllDirectories)
+                ScanFileTree(path, pattern, files);
+
+            return files;
+        }
+
         public static void FindFiles(Torrent torrent, List<FileInfo> files, string destinationPath, bool copyFile, bool checkFirstOnly)
         {
             //int i = 0;
