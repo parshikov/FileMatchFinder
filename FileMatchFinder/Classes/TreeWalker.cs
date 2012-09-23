@@ -1,11 +1,51 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace FilesMatchFinder
 {
     public static class TreeWalker
     {
-        public static void FindFiles(Torrent torrent, List<FileInfo> files, string destinationPath, bool copyFile, bool checkFirstOnly)
+        [DllImport("Kernel32.dll", CharSet = CharSet.Unicode)]
+        static extern bool CreateHardLink(
+        string lpFileName,
+        string lpExistingFileName,
+        IntPtr lpSecurityAttributes
+        );
+
+        public static void ScanFileTree(string path, string pattern, List<FileInfo> files)
+        {
+            foreach (string dir in Directory.GetDirectories(path))
+            {
+                try
+                {
+                    DirectoryInfo currentDir = new DirectoryInfo(dir);
+                    files.AddRange(currentDir.GetFiles(pattern, SearchOption.TopDirectoryOnly));
+
+                    ScanFileTree(dir, pattern, files);
+                }
+                catch (UnauthorizedAccessException e)
+                {
+                    continue;
+                }
+            }
+        }
+
+        public static List<FileInfo> ScanFileTree(string path, string pattern, SearchOption searchOption)
+        {
+            List<FileInfo> files = new List<FileInfo>();
+
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            files.AddRange(dirInfo.GetFiles(pattern, SearchOption.TopDirectoryOnly));
+
+            if (searchOption == SearchOption.AllDirectories)
+                ScanFileTree(path, pattern, files);
+
+            return files;
+        }
+
+        public static void FindFiles(Torrent torrent, List<FileInfo> files, string destinationPath, bool checkFirstOnly, bool copyFile, bool useHardlink)
         {
             //int i = 0;
 
@@ -33,10 +73,17 @@ namespace FilesMatchFinder
 
                     if (!fileToMove.Exists)
                     {
-                        if (copyFile)
-                            File.Copy(fileOnDisk.FullName, fileToMove.FullName);
+                        if (!useHardlink)
+                        {
+                            if (copyFile)
+                                File.Copy(fileOnDisk.FullName, fileToMove.FullName);
+                            else
+                                File.Move(fileOnDisk.FullName, fileToMove.FullName);
+                        }
                         else
-                            File.Move(fileOnDisk.FullName, fileToMove.FullName);
+                        {
+                            CreateHardLink(fileToMove.FullName, fileOnDisk.FullName, IntPtr.Zero);
+                        }
 
                         // И убираем из списка рассматириваемых
                         files.Remove(fileOnDisk);
