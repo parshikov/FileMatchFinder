@@ -40,6 +40,7 @@
             this.sortedFilesPathLabel = new System.Windows.Forms.Label();
             this.startButton = new System.Windows.Forms.Button();
             this.settingBox = new System.Windows.Forms.GroupBox();
+            this.useHardLink = new System.Windows.Forms.CheckBox();
             this.checkOnlyFirstPiece = new System.Windows.Forms.CheckBox();
             this.copyFileCheckbox = new System.Windows.Forms.CheckBox();
             this.chooseDestinationFolderButton = new System.Windows.Forms.Button();
@@ -140,13 +141,14 @@
             this.startButton.Location = new System.Drawing.Point(487, 169);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
-            this.startButton.TabIndex = 10;
+            this.startButton.TabIndex = 11;
             this.startButton.Text = "Старт";
             this.startButton.UseVisualStyleBackColor = true;
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
             // settingBox
             // 
+            this.settingBox.Controls.Add(this.useHardLink);
             this.settingBox.Controls.Add(this.checkOnlyFirstPiece);
             this.settingBox.Controls.Add(this.startButton);
             this.settingBox.Controls.Add(this.copyFileCheckbox);
@@ -166,12 +168,24 @@
             this.settingBox.TabIndex = 11;
             this.settingBox.TabStop = false;
             // 
+            // useHardLink
+            // 
+            this.useHardLink.AutoSize = true;
+            this.useHardLink.Enabled = false;
+            this.useHardLink.ForeColor = System.Drawing.Color.Red;
+            this.useHardLink.Location = new System.Drawing.Point(256, 152);
+            this.useHardLink.Name = "useHardLink";
+            this.useHardLink.Size = new System.Drawing.Size(260, 17);
+            this.useHardLink.TabIndex = 10;
+            this.useHardLink.Text = "Использовать жесткие ссылки (нестабильно)";
+            this.useHardLink.UseVisualStyleBackColor = true;
+            // 
             // checkOnlyFirstPiece
             // 
             this.checkOnlyFirstPiece.AutoSize = true;
             this.checkOnlyFirstPiece.Checked = true;
             this.checkOnlyFirstPiece.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkOnlyFirstPiece.Location = new System.Drawing.Point(256, 152);
+            this.checkOnlyFirstPiece.Location = new System.Drawing.Point(256, 173);
             this.checkOnlyFirstPiece.Name = "checkOnlyFirstPiece";
             this.checkOnlyFirstPiece.Size = new System.Drawing.Size(222, 17);
             this.checkOnlyFirstPiece.TabIndex = 9;
@@ -309,6 +323,7 @@
         private System.Windows.Forms.FolderBrowserDialog destinationFolderBrowser;
         private System.ComponentModel.BackgroundWorker fileFindWorker;
         private System.Windows.Forms.CheckBox checkOnlyFirstPiece;
+        private System.Windows.Forms.CheckBox useHardLink;
         private System.Windows.Forms.ProgressBar workProgressBar;
         private System.Windows.Forms.Label workProgressLabel;
     }
