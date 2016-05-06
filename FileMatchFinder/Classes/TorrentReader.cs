@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using BencodeLibrary;
+using System.IO;
 
 namespace FilesMatchFinder
 {
@@ -33,7 +34,7 @@ namespace FilesMatchFinder
                     string fullPath = name;
                     foreach (BString partOfPath in filePaths)
                     {
-                        fullPath += @"\" + partOfPath.Value;
+                        fullPath += Path.PathSeparator + partOfPath.Value;
                     }
                     files.Add(new LostFile(fullPath, length, begin));
 
@@ -45,7 +46,7 @@ namespace FilesMatchFinder
                 long Length = ((BInt)fileInfo["length"]).Value;
                 files.Add(new LostFile(name, Length, 0));
             }
-
+            
             return new Torrent(name, files, pieceLength, pieces, filename);
         }
     }

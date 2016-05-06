@@ -26,7 +26,7 @@ namespace FilesMatchFinder
 
                     // Все проверки пройдены. перед нами искомый файл
                     // Перемещаем его
-                    FileInfo fileToMove = new FileInfo(destinationPath + @"\" + fileInTorrent.Name);
+                    FileInfo fileToMove = new FileInfo(destinationPath + Path.PathSeparator + fileInTorrent.Name);
 
                     if (!Directory.Exists(fileToMove.DirectoryName))
                         Directory.CreateDirectory(fileToMove.DirectoryName);

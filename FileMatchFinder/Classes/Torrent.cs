@@ -80,6 +80,7 @@ namespace FilesMatchFinder
                         fs.Read(piece, 0, this.PieceLength);
                         fileHash = Encoding.GetEncoding(437).GetString(sha1.ComputeHash(piece)).ToCharArray();
 
+                        
                         for (int i = 0; i < fileHash.Length; i++)
                             if (fileHash[i] != hashInTorrent[i])
                                 return false;
