@@ -34,7 +34,7 @@ namespace FilesMatchFinder
                     string fullPath = name;
                     foreach (BString partOfPath in filePaths)
                     {
-                        fullPath += Path.PathSeparator + partOfPath.Value;
+                        fullPath += Path.DirectorySeparatorChar + partOfPath.Value;
                     }
                     files.Add(new LostFile(fullPath, length, begin));
 
